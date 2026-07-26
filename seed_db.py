@@ -26,11 +26,13 @@ def seed():
         'media/hero', 'media/about', 'media/services',
         'media/blog', 'media/testimonials', 'media/gallery'
     ]
+    from django.conf import settings
     for path in media_paths:
-        os.makedirs(os.path.join('/Users/gulcu.21/Desktop/roselle_beauty', path), exist_ok=True)
+        os.makedirs(os.path.join(settings.BASE_DIR, path), exist_ok=True)
 
-    assets_src = '/Users/gulcu.21/Desktop/roselle_beauty/Ürünler ve Reklamlar'
-    media_dest = '/Users/gulcu.21/Desktop/roselle_beauty/media'
+    from django.conf import settings
+    assets_src = os.path.join(settings.BASE_DIR, 'Ürünler ve Reklamlar')
+    media_dest = os.path.join(settings.BASE_DIR, 'media')
 
     # Helper function to copy image safely
     def copy_media(src_name, dest_subpath):
