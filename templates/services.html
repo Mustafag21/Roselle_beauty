@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Hizmetlerimiz — {{ site_settings.site_title }}{% endblock %}
+{% block meta_desc %}Roselle Beauty profesyonel güzellik ve bakım hizmetleri.{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">Ana Sayfa</a>
+            <span>/</span>
+            <span>Hizmetlerimiz</span>
+        </div>
+        <h1>Hizmetlerimiz</h1>
+        <p>Uzman kadromuz ve üstün kaliteli ürünlerimizle güzelliğinizi ön plana çıkarıyoruz.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="services-grid stagger-children">
+            {% for service in services %}
+            <a href="{% url 'service_detail' service.slug %}" class="service-card">
+                <div class="service-card__image">
+                    <img src="{{ service.image.url }}" alt="{{ service.name }}" loading="lazy">
+                </div>
+                <div class="service-card__body">
+                    <div class="service-card__icon"><i class="{{ service.icon }}"></i></div>
+                    <h3 class="service-card__title">{{ service.name }}</h3>
+                    <p class="service-card__desc">{{ service.short_description }}</p>
+                </div>
+            </a>
+            {% empty %}
+            <div class="empty-state">
+                <i class="fas fa-spa"></i>
+                <p>Henüz hizmet eklenmemiş.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

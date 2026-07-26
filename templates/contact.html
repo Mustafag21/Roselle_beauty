@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}İletişim — {{ site_settings.site_title }}{% endblock %}
+{% block meta_desc %}Roselle Beauty & Care ile iletişime geçin. Adres, telefon, whatsapp ve harita bilgileri.{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">Ana Sayfa</a>
+            <span>/</span>
+            <span>İletişim</span>
+        </div>
+        <h1>İletişim</h1>
+        <p>Bize sorularınızı yazabilir veya WhatsApp üzerinden hemen bizimle iletişime geçebilirsiniz.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="contact-grid">
+            <!-- Form Card -->
+            <div class="reveal-left" style="background: var(--color-white); border: 1px solid var(--color-border-light); padding: 40px; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+                <h2 style="margin-bottom: 24px; font-family: var(--font-heading);">Mesaj Gönderin</h2>
+                <form id="contactForm" action="{% url 'contact_submit' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="contact-name" class="form-label">Adınız Soyadınız</label>
+                        {{ form.name }}
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-email" class="form-label">E-posta Adresiniz</label>
+                        {{ form.email }}
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-phone" class="form-label">Telefon Numaranız</label>
+                        {{ form.phone }}
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-subject" class="form-label">Konu</label>
+                        {{ form.subject }}
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-message" class="form-label">Mesajınız</label>
+                        {{ form.message }}
+                    </div>
+                    <button type="submit" class="btn btn--primary btn--lg" style="width: 100%;">
+                        Gönder <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Info & Hours -->
+            <div class="reveal-right">
+                <div class="contact-info-card" style="margin-bottom: 30px;">
+                    <h2 style="color: var(--color-white); margin-bottom: 30px; font-family: var(--font-heading);">İletişim Bilgileri</h2>
+                    
+                    <div class="contact-info-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Telefon</h4>
+                            <p>{{ contact.phone }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>E-posta</h4>
+                            <p>{{ contact.email }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Adres</h4>
+                            <p>{{ contact.address }}</p>
+                        </div>
+                    </div>
+
+                    {% if whatsapp_number %}
+                    <div class="contact-info-item">
+                        <i class="fab fa-whatsapp" style="background: rgba(37,211,102,0.15); color: #25D366;"></i>
+                        <div>
+                            <h4>WhatsApp</h4>
+                            <p><a href="https://wa.me/{{ whatsapp_number }}?text={{ whatsapp_message|urlencode }}" target="_blank" style="color: var(--color-primary-light); text-decoration: underline;">WhatsApp'tan Mesaj Gönder</a></p>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Working Hours -->
+                <div style="background: var(--color-bg-alt); border: 1px solid var(--color-border-light); padding: 40px; border-radius: var(--radius-lg);">
+                    <h3 style="margin-bottom: 20px; font-family: var(--font-heading);"><i class="far fa-clock" style="color: var(--color-primary); margin-right: 8px;"></i> Çalışma Saatleri</h3>
+                    <ul style="display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem;">
+                        <li style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--color-border); padding-bottom: 8px;">
+                            <span style="font-weight: 500; color: var(--color-dark);">Hafta İçi:</span>
+                            <span style="color: var(--color-text-light);">{{ contact.working_hours_weekday }}</span>
+                        </li>
+                        <li style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--color-border); padding-bottom: 8px;">
+                            <span style="font-weight: 500; color: var(--color-dark);">Cumartesi:</span>
+                            <span style="color: var(--color-text-light);">{{ contact.working_hours_saturday }}</span>
+                        </li>
+                        <li style="display: flex; justify-content: space-between; padding-bottom: 8px;">
+                            <span style="font-weight: 500; color: var(--color-dark);">Pazar:</span>
+                            <span style="color: var(--color-text-light);">{{ contact.working_hours_sunday }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Maps -->
+{% if contact.map_embed %}
+<section class="section" style="padding-top: 0;">
+    <div class="container reveal">
+        <div style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); height: 450px; width: 100%;">
+            {{ contact.map_embed|safe }}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

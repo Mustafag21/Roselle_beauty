@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Arama Sonuçları — {{ site_settings.site_title }}{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">Ana Sayfa</a>
+            <span>/</span>
+            <span>Arama Sonuçları</span>
+        </div>
+        <h1>Arama Sonuçları</h1>
+        <p>"{{ query }}" araması için bulunan sonuçlar</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <form class="search-bar" action="{% url 'search' %}" method="get">
+            <input type="text" name="q" value="{{ query }}" placeholder="Ürün veya blog yazısı arayın..." required>
+            <button type="submit" class="btn btn--primary">Ara</button>
+        </form>
+
+        {% if products %}
+        <div style="margin-bottom: 50px;">
+            <h2 style="font-family: var(--font-heading); margin-bottom: 24px; border-bottom: 1px solid var(--color-border-light); padding-bottom: 12px;">Bulunan Ürünler</h2>
+            <div class="products-grid stagger-children">
+                {% for product in products %}
+                <div class="product-card">
+                    <a href="{% url 'product_detail' product.slug %}" class="product-card__image">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+                    </a>
+                    <div class="product-card__body">
+                        <h3 class="product-card__title">{{ product.name }}</h3>
+                        <p class="product-card__desc">{{ product.short_description }}</p>
+                        <div class="product-card__footer">
+                            <div class="product-card__price">
+                                {% if product.price %}₺{{ product.price }}{% else %}Fiyat Sorunuz{% endif %}
+                            </div>
+                            {% if whatsapp_number %}
+                            <a href="https://wa.me/{{ whatsapp_number }}?text=Merhaba%2C%20{{ product.name|urlencode }}%20ürünü%20hakkında%20bilgi%20almak%20istiyorum." target="_blank" class="product-card__whatsapp">
+                                <i class="fab fa-whatsapp"></i> İletişime Geç
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if blog_posts %}
+        <div>
+            <h2 style="font-family: var(--font-heading); margin-bottom: 24px; border-bottom: 1px solid var(--color-border-light); padding-bottom: 12px;">Bulunan Blog Yazıları</h2>
+            <div class="blog-grid stagger-children">
+                {% for post in blog_posts %}
+                <a href="{% url 'blog_detail' post.slug %}" class="blog-card">
+                    <div class="blog-card__image">
+                        <img src="{{ post.cover_image.url }}" alt="{{ post.title }}" loading="lazy">
+                    </div>
+                    <div class="blog-card__body">
+                        <h3 class="blog-card__title">{{ post.title }}</h3>
+                        <p class="blog-card__excerpt">{{ post.excerpt }}</p>
+                        <span class="blog-card__link">Devamını Oku <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if not products and not blog_posts %}
+        <div class="empty-state">
+            <i class="fas fa-search"></i>
+            <p>Aramanızla eşleşen hiçbir sonuç bulunamadı. Farklı anahtar kelimeler deneyebilirsiniz.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

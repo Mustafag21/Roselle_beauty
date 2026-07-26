@@ -1,0 +1,153 @@
+/*
+ * Roselle Beauty & Care — Responsive CSS
+ * Mobile-first responsive breakpoints
+ */
+
+/* ═══════════════════════════════════════════════════════════
+   TABLET (max-width: 991px)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 991px) {
+    :root {
+        --section-spacing: 70px;
+        --navbar-height: 70px;
+    }
+
+    /* Navbar - mobile drawer */
+    .hamburger { display: flex; }
+    .nav-menu { display: none; } /* Hide desktop menus on mobile */
+    .nav-logo { grid-column: 1 / -1; justify-self: start; padding-left: 20px; }
+    
+    .mobile-menu-drawer {
+        position: fixed;
+        top: 0;
+        right: -320px;
+        width: 300px;
+        height: 100vh;
+        background: var(--color-white);
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 100px 30px 30px;
+        gap: 10px;
+        box-shadow: var(--shadow-xl);
+        z-index: 999;
+        transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .mobile-menu-drawer.is-active { right: 0; }
+    .mobile-menu-inner {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .mobile-menu-inner a {
+        padding: 14px 16px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: var(--color-text);
+        border-radius: var(--radius-md);
+        transition: var(--transition);
+    }
+    .mobile-menu-inner a:hover, .mobile-menu-inner a.active {
+        background: var(--color-primary-soft);
+        color: var(--color-primary);
+    }
+    .nav-menu a::after { display: none; }
+    .nav-menu a:hover, .nav-menu a.active {
+        background: var(--color-primary-soft);
+    }
+    .nav-cta {
+        margin-top: 16px;
+        text-align: center;
+    }
+
+    /* Grids */
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .product-detail { grid-template-columns: 1fr; gap: 40px; }
+    .about-split { grid-template-columns: 1fr; gap: 40px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+
+    /* Social fixed */
+    .social-fixed { display: none; }
+
+    /* Gallery */
+    .gallery-grid { columns: 2; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE LANDSCAPE (max-width: 767px)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+    :root {
+        --section-spacing: 60px;
+    }
+
+    .container { padding: 0 20px; }
+
+    .section-header { margin-bottom: 40px; }
+
+    .hero__content { max-width: 100%; }
+    .hero__title { font-size: clamp(2rem, 7vw, 3rem); }
+
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .blog-grid { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+
+    .footer-grid { grid-template-columns: 1fr; text-align: center; }
+    .footer-social { justify-content: center; }
+    .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+
+    .newsletter-form { flex-direction: column; }
+
+    .hero__actions { flex-direction: column; align-items: flex-start; }
+
+    .product-detail__gallery { position: static; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE (max-width: 479px)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 479px) {
+    :root {
+        --section-spacing: 50px;
+    }
+
+    .products-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .product-card__body { padding: 16px; }
+    .product-card__footer { flex-direction: column; gap: 12px; align-items: flex-start; }
+
+    .category-filters { gap: 8px; }
+    .category-filter { padding: 8px 16px; font-size: 0.8rem; }
+
+    .gallery-grid { columns: 1; }
+
+    .whatsapp-float {
+        bottom: 20px;
+        right: 20px;
+        width: 52px;
+        height: 52px;
+        font-size: 1.4rem;
+    }
+    .back-to-top { bottom: 80px; right: 20px; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LARGE SCREENS (min-width: 1400px)
+   ═══════════════════════════════════════════════════════════ */
+@media (min-width: 1400px) {
+    :root {
+        --container-max: 1400px;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PRINT
+   ═══════════════════════════════════════════════════════════ */
+@media print {
+    .navbar, .footer, .whatsapp-float, .back-to-top, .social-fixed,
+    .preloader { display: none !important; }
+    body { background: #fff; color: #000; }
+}

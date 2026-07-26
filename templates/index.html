@@ -1,0 +1,338 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ site_settings.site_title }} — {{ site_settings.site_slogan }}{% endblock %}
+
+{% block content %}
+<!-- ====== HERO SECTION ====== -->
+{% if banners %}
+<section class="hero" id="hero">
+    {% for banner in banners %}
+    <div class="hero__slide {% if forloop.first %}is-active{% endif %}" style="display:{% if forloop.first %}flex{% else %}none{% endif %};position:{% if not forloop.first %}absolute{% endif %};inset:0;align-items:center;">
+        <div class="hero__bg">
+            <img src="{{ banner.background_image.url }}" alt="{{ banner.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+        </div>
+        <div class="hero__overlay" style="background:linear-gradient(135deg, rgba(26,24,22,0.{{ banner.overlay_opacity }}) 0%, rgba(26,24,22,0.2) 100%);"></div>
+        <div class="container">
+            <div class="hero__content">
+                <div class="hero__tag"><i class="fas fa-leaf"></i> Roselle Beauty & Care</div>
+                <h1 class="hero__title">{{ banner.title }}</h1>
+                <p class="hero__text">{{ banner.subtitle }}</p>
+                <div class="hero__actions">
+                    {% if banner.cta_text %}
+                    <a href="{{ banner.cta_link }}" class="btn btn--primary btn--lg">
+                        {{ banner.cta_text }} <i class="fas fa-arrow-right"></i>
+                    </a>
+                    {% endif %}
+                    {% if whatsapp_number %}
+                    <a href="https://wa.me/{{ whatsapp_number }}?text={{ whatsapp_message|urlencode }}" target="_blank" class="btn btn--whatsapp btn--lg">
+                        <i class="fab fa-whatsapp"></i> Bize Ulaşın
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% if banners|length > 1 %}
+    <div class="hero__dots">
+        {% for banner in banners %}
+        <button class="hero__dot {% if forloop.first %}is-active{% endif %}" data-index="{{ forloop.counter0 }}"></button>
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+{% else %}
+<section class="hero" id="hero">
+    <div class="hero__bg" style="background:linear-gradient(135deg, var(--color-bg-dark), #2A2420);"></div>
+    <div class="hero__overlay"></div>
+    <div class="container">
+        <div class="hero__content">
+            <div class="hero__tag"><i class="fas fa-leaf"></i> Roselle Beauty & Care</div>
+            <h1 class="hero__title">Güzelliğinize <em>Değer</em> Katıyoruz</h1>
+            <p class="hero__text">Doğal ve etkili formüllerle cildinize ve saçlarınıza profesyonel bakım.</p>
+            <div class="hero__actions">
+                <a href="{% url 'products' %}" class="btn btn--primary btn--lg">Ürünleri Keşfet <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ====== BRAND FEATURES TICKER ====== -->
+<!-- ====== BRAND TICKER ====== -->
+<section class="brand-ticker">
+    <div class="brand-ticker__track">
+        {% for i in "1234" %}
+        <div class="brand-ticker__item">
+            <i class="fas fa-leaf"></i>
+            <span>Dermatolojik Olarak Test Edilmiştir</span>
+        </div>
+        <span class="brand-ticker__divider">✦</span>
+        
+        <div class="brand-ticker__item">
+            <i class="fas fa-paw"></i>
+            <span>Cruelty-Free & Vegan İçerik</span>
+        </div>
+        <span class="brand-ticker__divider">✦</span>
+        
+        <div class="brand-ticker__item">
+            <i class="fas fa-microscope"></i>
+            <span>Klinik Olarak Kanıtlanmış Etki</span>
+        </div>
+        <span class="brand-ticker__divider">✦</span>
+        
+        <div class="brand-ticker__item">
+            <i class="fas fa-seedling"></i>
+            <span>%100 Doğal ve Saf Formüller</span>
+        </div>
+        <span class="brand-ticker__divider">✦</span>
+        
+        <div class="brand-ticker__item">
+            <i class="fas fa-shield-alt"></i>
+            <span>Hipoalerjenik & Hassas Ciltlere Özel</span>
+        </div>
+        <span class="brand-ticker__divider">✦</span>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- ====== HAKKIMIZDA KISA ====== -->
+{% if about %}
+<section class="section section--dark" id="about-preview">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-badge" style="background:rgba(255,255,255,0.08);color:var(--color-primary-light);">
+                <i class="fas fa-sparkles"></i> Hakkımızda
+            </div>
+            <h2>{{ about.subtitle|default:"Doğal güzelliğinizi keşfedin" }}</h2>
+            <p class="section-subtitle" style="color:rgba(255,255,255,0.6);">{{ about.content|truncatechars:200 }}</p>
+        </div>
+        <div class="stats-grid reveal">
+            <div class="stat-item">
+                <div class="stat-item__number counter" data-target="{{ about.years_experience }}" data-suffix="+">0</div>
+                <div class="stat-item__label">Yıl Deneyim</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item__number counter" data-target="{{ about.happy_customers }}" data-suffix="+">0</div>
+                <div class="stat-item__label">Mutlu Müşteri</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item__number counter" data-target="{{ about.products_count }}" data-suffix="+">0</div>
+                <div class="stat-item__label">Ürün Çeşidi</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item__number counter" data-target="{{ about.natural_ingredients }}" data-suffix="%">0</div>
+                <div class="stat-item__label">Doğal İçerik</div>
+            </div>
+        </div>
+        <div style="text-align:center;margin-top:40px;" class="reveal">
+            <a href="{% url 'about' %}" class="btn btn--outline" style="border-color:rgba(255,255,255,0.2);color:var(--color-white);">
+                Daha Fazla <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ====== ÖNE ÇIKAN ÜRÜNLER ====== -->
+<section class="section" id="products">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-badge"><i class="fas fa-shopping-bag"></i> Ürünlerimiz</div>
+            <h2>Öne Çıkan <em>Ürünler</em></h2>
+            <p class="section-subtitle">Cildiniz ve saçlarınız için en doğal ve etkili formüller</p>
+        </div>
+        <div class="products-grid stagger-children">
+            {% for product in featured_products %}
+            <div class="product-card">
+                {% if product.badge %}
+                <span class="product-card__badge product-card__badge--{{ product.badge }}">
+                    {{ product.get_badge_display }}
+                </span>
+                {% endif %}
+                <a href="{% url 'product_detail' product.slug %}" class="product-card__image">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+                    {% if product.image_hover %}
+                    <img src="{{ product.image_hover.url }}" alt="{{ product.name }}" class="hover-img" loading="lazy">
+                    {% endif %}
+                    <div class="product-card__overlay">
+                        <div class="product-card__overlay-actions">
+                            <span class="product-card__overlay-btn"><i class="fas fa-eye"></i></span>
+                        </div>
+                    </div>
+                </a>
+                <div class="product-card__body">
+                    {% if product.category %}
+                    <div class="product-card__category">{{ product.category.name }}</div>
+                    {% endif %}
+                    <h3 class="product-card__title">{{ product.name }}</h3>
+                    <p class="product-card__desc">{{ product.short_description }}</p>
+                    <div class="product-card__footer">
+                        <div class="product-card__price-action">
+                            <span class="price-text">Fiyat İçin</span>
+                            <i class="fas fa-arrow-down bounce-down"></i>
+                        </div>
+                        {% if whatsapp_number %}
+                        <a href="https://wa.me/{{ whatsapp_number }}?text=Merhaba%2C%20{{ product.name|urlencode }}%20ürünü%20hakkında%20bilgi%20almak%20istiyorum." target="_blank" class="product-card__whatsapp">
+                            <i class="fab fa-whatsapp"></i> İletişime Geç
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <i class="fas fa-shopping-bag"></i>
+                <p>Henüz ürün eklenmemiş. Admin panelden ürün ekleyebilirsiniz.</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% if featured_products %}
+        <div style="text-align:center;margin-top:48px;" class="reveal">
+            <a href="{% url 'products' %}" class="btn btn--outline">Tüm Ürünleri Gör <i class="fas fa-arrow-right"></i></a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- ====== HİZMETLER ====== -->
+{% if services %}
+<section class="section section--alt" id="services">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-badge"><i class="fas fa-spa"></i> Hizmetlerimiz</div>
+            <h2>Profesyonel <em>Bakım</em></h2>
+            <p class="section-subtitle">Uzman ekibimizle güzelliğinize değer katıyoruz</p>
+        </div>
+        <div class="services-grid stagger-children">
+            {% for service in services %}
+            <a href="{% url 'service_detail' service.slug %}" class="service-card">
+                <div class="service-card__image">
+                    <img src="{{ service.image.url }}" alt="{{ service.name }}" loading="lazy">
+                </div>
+                <div class="service-card__body">
+                    <div class="service-card__icon"><i class="{{ service.icon }}"></i></div>
+                    <h3 class="service-card__title">{{ service.name }}</h3>
+                    <p class="service-card__desc">{{ service.short_description }}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ====== MÜŞTERİ YORUMLARI ====== -->
+{% if testimonials or site_settings.google_reviews_widget_code %}
+<section class="section" id="testimonials">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-badge"><i class="fas fa-star"></i> Yorumlar</div>
+            <h2>Mutlu <em>Müşterilerimiz</em></h2>
+        </div>
+        
+        {% if site_settings.google_reviews_widget_code %}
+        <!-- Google Reviews Widget (Elfsight / Trustpilot vb.) -->
+        <div class="google-reviews-widget-container reveal">
+            {{ site_settings.google_reviews_widget_code|safe }}
+        </div>
+        {% else %}
+        <!-- Eski / Manuel Yorum Sistemi -->
+        <div class="testimonials-grid stagger-children">
+            {% for t in testimonials %}
+            <div class="testimonial-card">
+                <div class="testimonial-card__quote">"</div>
+                <div class="testimonial-card__stars">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= t.rating %}
+                        <i class="fas fa-star"></i>
+                        {% else %}
+                        <i class="far fa-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <p class="testimonial-card__text">{{ t.text }}</p>
+                <div class="testimonial-card__author">
+                    {% if t.photo %}
+                    <img src="{{ t.photo.url }}" alt="{{ t.name }}" class="testimonial-card__avatar">
+                    {% else %}
+                    <div class="testimonial-card__avatar testimonial-card__avatar--placeholder">{{ t.name|first }}</div>
+                    {% endif %}
+                    <div>
+                        <div class="testimonial-card__name">{{ t.name }}</div>
+                        {% if t.role %}
+                        <div class="testimonial-card__role">{{ t.role }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+
+<!-- ====== BLOG ====== -->
+{% if blog_posts %}
+<section class="section section--alt" id="blog">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-badge"><i class="fas fa-blog"></i> Blog</div>
+            <h2>Güzellik <em>İpuçları</em></h2>
+            <p class="section-subtitle">Cilt ve saç bakımı hakkında uzman önerileri</p>
+        </div>
+        <div class="blog-grid stagger-children">
+            {% for post in blog_posts %}
+            <a href="{% url 'blog_detail' post.slug %}" class="blog-card">
+                <div class="blog-card__image">
+                    <img src="{{ post.cover_image.url }}" alt="{{ post.title }}" loading="lazy">
+                </div>
+                <div class="blog-card__body">
+                    <div class="blog-card__meta">
+                        {% if post.category %}
+                        <span class="blog-card__category">{{ post.category.name }}</span>
+                        {% endif %}
+                        <span><i class="far fa-calendar"></i> {{ post.published_at|date:"d M Y" }}</span>
+                        <span><i class="far fa-clock"></i> {{ post.read_time }} dk</span>
+                    </div>
+                    <h3 class="blog-card__title">{{ post.title }}</h3>
+                    <p class="blog-card__excerpt">{{ post.excerpt }}</p>
+                    <span class="blog-card__link">Devamını Oku <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        <div style="text-align:center;margin-top:48px;" class="reveal">
+            <a href="{% url 'blog' %}" class="btn btn--outline">Tüm Yazılar <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ====== FAQ ====== -->
+{% if faqs %}
+<section class="section" id="faq">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-badge"><i class="fas fa-question-circle"></i> SSS</div>
+            <h2>Sık Sorulan <em>Sorular</em></h2>
+        </div>
+        <div class="faq-list reveal">
+            {% for faq in faqs %}
+            <div class="faq-item">
+                <button class="faq-item__question">
+                    <span>{{ faq.question }}</span>
+                    <span class="faq-item__icon"><i class="fas fa-plus"></i></span>
+                </button>
+                <div class="faq-item__answer">
+                    <div class="faq-item__answer-inner">{{ faq.answer }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

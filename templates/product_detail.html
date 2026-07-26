@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} — {{ site_settings.site_title }}{% endblock %}
+{% block meta_desc %}{{ product.short_description }}{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">Ana Sayfa</a><span>/</span>
+            <a href="{% url 'products' %}">Ürünler</a><span>/</span>
+            <span>{{ product.name }}</span>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="product-detail">
+            <!-- Gallery -->
+            <div class="product-detail__gallery reveal-left">
+                <div class="product-detail__main-image">
+                    <img id="productMainImage" src="{{ product.image.url }}" alt="{{ product.name }}">
+                </div>
+                {% if product.gallery_images.all %}
+                <div class="product-detail__thumbs">
+                    <div class="product-detail__thumb is-active">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    </div>
+                    {% for img in product.gallery_images.all %}
+                    <div class="product-detail__thumb">
+                        <img src="{{ img.image.url }}" data-full="{{ img.image.url }}" alt="{{ img.alt_text|default:product.name }}">
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Info -->
+            <div class="product-detail__info reveal-right">
+                {% if product.badge %}
+                <span class="product-card__badge product-card__badge--{{ product.badge }}" style="position:static;display:inline-block;margin-bottom:16px;">
+                    {{ product.get_badge_display }}
+                </span>
+                {% endif %}
+                {% if product.category %}
+                <div class="product-card__category" style="margin-bottom:8px;">{{ product.category.name }}</div>
+                {% endif %}
+                <h1>{{ product.name }}</h1>
+                {% if product.volume %}
+                <p class="product-detail__volume">{{ product.volume }}</p>
+                {% endif %}
+
+                <div class="product-detail__price-block">
+                    {% if product.price %}
+                    <span class="product-detail__price">₺{{ product.price }}</span>
+                    {% if product.has_discount %}
+                    <span class="product-detail__old-price">₺{{ product.old_price }}</span>
+                    {% endif %}
+                    {% else %}
+                    <span class="product-detail__price">Fiyat Sorunuz</span>
+                    {% endif %}
+                </div>
+
+                <p class="product-detail__desc">{{ product.short_description }}</p>
+
+                <!-- WhatsApp CTA -->
+                {% if whatsapp_number %}
+                <a href="https://wa.me/{{ whatsapp_number }}?text=Merhaba%2C%20{{ product.name|urlencode }}%20ürünü%20hakkında%20bilgi%20almak%20istiyorum.%20Fiyat%3A%20{{ product.price|default:'Bilgi%20almak%20istiyorum' }}" target="_blank" class="btn btn--whatsapp btn--lg" style="margin-bottom:30px;">
+                    <i class="fab fa-whatsapp"></i> İletişime Geç
+                </a>
+                {% endif %}
+
+                <!-- Tabs -->
+                <div class="tabs">
+                    <div class="tabs__nav">
+                        <button class="tabs__btn is-active" data-tab="tab-desc">Açıklama</button>
+                        {% if product.ingredients %}
+                        <button class="tabs__btn" data-tab="tab-ingredients">İçerik</button>
+                        {% endif %}
+                        {% if product.usage_info %}
+                        <button class="tabs__btn" data-tab="tab-usage">Kullanım</button>
+                        {% endif %}
+                    </div>
+                    <div class="tabs__content is-active" id="tab-desc">
+                        <p>{{ product.description|linebreaksbr }}</p>
+                    </div>
+                    {% if product.ingredients %}
+                    <div class="tabs__content" id="tab-ingredients">
+                        <p>{{ product.ingredients|linebreaksbr }}</p>
+                    </div>
+                    {% endif %}
+                    {% if product.usage_info %}
+                    <div class="tabs__content" id="tab-usage">
+                        <p>{{ product.usage_info|linebreaksbr }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Products -->
+{% if related_products %}
+<section class="section section--alt">
+    <div class="container">
+        <div class="section-header reveal">
+            <h2>Benzer <em>Ürünler</em></h2>
+        </div>
+        <div class="products-grid stagger-children">
+            {% for product in related_products %}
+            <div class="product-card">
+                <a href="{% url 'product_detail' product.slug %}" class="product-card__image">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+                </a>
+                <div class="product-card__body">
+                    <h3 class="product-card__title">{{ product.name }}</h3>
+                    <div class="product-card__footer">
+                        <div class="product-card__price">
+                            {% if product.price %}₺{{ product.price }}{% else %}Fiyat Sorunuz{% endif %}
+                        </div>
+                        {% if whatsapp_number %}
+                        <a href="https://wa.me/{{ whatsapp_number }}?text=Merhaba%2C%20{{ product.name|urlencode }}%20ürünü%20hakkında%20bilgi%20almak%20istiyorum." target="_blank" class="product-card__whatsapp">
+                            <i class="fab fa-whatsapp"></i> İletişime Geç
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

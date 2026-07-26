@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Blog — {{ site_settings.site_title }}{% endblock %}
+{% block meta_desc %}Roselle Beauty güzellik, cilt bakımı ve saç bakımı hakkında blog yazıları{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">Ana Sayfa</a><span>/</span>
+            <span>Blog</span>
+        </div>
+        <h1>Blog</h1>
+        <p>Cilt ve saç bakımı hakkında uzman önerileri ve bilgiler</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        {% if categories %}
+        <div class="category-filters reveal">
+            <a href="{% url 'blog' %}" class="category-filter {% if not active_category %}is-active{% endif %}">Tümü</a>
+            {% for cat in categories %}
+            <a href="{% url 'blog' %}?kategori={{ cat.slug }}" class="category-filter {% if active_category == cat.slug %}is-active{% endif %}">
+                {{ cat.name }}
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="blog-grid stagger-children">
+            {% for post in posts %}
+            <a href="{% url 'blog_detail' post.slug %}" class="blog-card">
+                <div class="blog-card__image">
+                    <img src="{{ post.cover_image.url }}" alt="{{ post.title }}" loading="lazy">
+                </div>
+                <div class="blog-card__body">
+                    <div class="blog-card__meta">
+                        {% if post.category %}
+                        <span class="blog-card__category">{{ post.category.name }}</span>
+                        {% endif %}
+                        <span><i class="far fa-calendar"></i> {{ post.published_at|date:"d M Y" }}</span>
+                        <span><i class="far fa-clock"></i> {{ post.read_time }} dk</span>
+                    </div>
+                    <h3 class="blog-card__title">{{ post.title }}</h3>
+                    <p class="blog-card__excerpt">{{ post.excerpt }}</p>
+                    <span class="blog-card__link">Devamını Oku <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </a>
+            {% empty %}
+            <div class="empty-state">
+                <i class="fas fa-blog"></i>
+                <p>Henüz blog yazısı eklenmemiş.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

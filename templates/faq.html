@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sık Sorulan Sorular — {{ site_settings.site_title }}{% endblock %}
+{% block meta_desc %}Roselle Beauty & Care cilt bakımı ve hizmetlerimiz hakkında merak edilenler.{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">Ana Sayfa</a>
+            <span>/</span>
+            <span>Sık Sorulan Sorular</span>
+        </div>
+        <h1>Sık Sorulan Sorular</h1>
+        <p>Aklınıza takılan tüm soruların cevaplarını burada bulabilirsiniz.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="faq-list reveal">
+            {% for faq in faqs %}
+            <div class="faq-item">
+                <button class="faq-item__question">
+                    <span>{{ faq.question }}</span>
+                    <span class="faq-item__icon"><i class="fas fa-plus"></i></span>
+                </button>
+                <div class="faq-item__answer">
+                    <div class="faq-item__answer-inner">
+                        {{ faq.answer|linebreaksbr }}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <i class="fas fa-question-circle"></i>
+                <p>Henüz sık sorulan soru eklenmemiş.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

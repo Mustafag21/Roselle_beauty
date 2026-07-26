@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Hakkımızda — {{ site_settings.site_title }}{% endblock %}
+{% block meta_desc %}{{ about.subtitle|default:"Doğal güzelliğinizi keşfedin" }}{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">Ana Sayfa</a>
+            <span>/</span>
+            <span>Hakkımızda</span>
+        </div>
+        <h1>Hakkımızda</h1>
+        <p>{{ about.subtitle|default:"Doğal güzelliğinizi keşfedin" }}</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="about-split">
+            <div class="about-image reveal-left">
+                {% if about.image %}
+                <img src="{{ about.image.url }}" alt="{{ about.title }}">
+                {% else %}
+                <img src="{% static 'images/roselle-logo.jpeg' %}" alt="Roselle Beauty">
+                {% endif %}
+            </div>
+            <div class="about-content reveal-right">
+                <h2>Hikayemiz</h2>
+                <p>{{ about.content|linebreaksbr }}</p>
+                {% if about.story %}
+                <h3 style="margin: 20px 0 10px; font-family: var(--font-heading);">Marka Hikayesi</h3>
+                <p>{{ about.story|linebreaksbr }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if about.mission or about.vision %}
+<section class="section section--alt">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;">
+            {% if about.mission %}
+            <div class="reveal-left" style="background: var(--color-white); padding: 40px; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border-light);">
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--color-primary-soft); color: var(--color-primary); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; font-size: 1.2rem;">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+                <h3 style="margin-bottom: 15px;">Misyonumuz</h3>
+                <p style="color: var(--color-text-light); line-height: 1.8;">{{ about.mission|linebreaksbr }}</p>
+            </div>
+            {% endif %}
+            {% if about.vision %}
+            <div class="reveal-right" style="background: var(--color-white); padding: 40px; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border-light);">
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--color-primary-soft); color: var(--color-primary); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; font-size: 1.2rem;">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <h3 style="margin-bottom: 15px;">Vizyonumuz</h3>
+                <p style="color: var(--color-text-light); line-height: 1.8;">{{ about.vision|linebreaksbr }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Stats band on Light Theme -->
+<section class="section">
+    <div class="container">
+        <div class="stats-grid reveal" style="border: 1px solid var(--color-border-light); padding: 40px; border-radius: var(--radius-lg); background: var(--color-white); box-shadow: var(--shadow-sm);">
+            <div class="stat-item">
+                <div class="stat-item__number counter" data-target="{{ about.years_experience }}" data-suffix="+">0</div>
+                <div class="stat-item__label">Yıl Deneyim</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item__number counter" data-target="{{ about.happy_customers }}" data-suffix="+">0</div>
+                <div class="stat-item__label">Mutlu Müşteri</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item__number counter" data-target="{{ about.products_count }}" data-suffix="+">0</div>
+                <div class="stat-item__label">Ürün Çeşidi</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item__number counter" data-target="{{ about.natural_ingredients }}" data-suffix="%">0</div>
+                <div class="stat-item__label">Doğal İçerik</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if gallery_images %}
+<section class="section section--alt">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-badge"><i class="fas fa-images"></i> Galeri</div>
+            <h2>Güzelliğin <em>Yansımaları</em></h2>
+        </div>
+        <div class="gallery-grid stagger-children">
+            {% for item in gallery_images %}
+            <div class="gallery-item">
+                <img src="{{ item.image.url }}" alt="{{ item.title }}" loading="lazy">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

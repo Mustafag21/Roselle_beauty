@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} — {{ site_settings.site_title }}{% endblock %}
+{% block meta_desc %}{{ post.meta_description|default:post.excerpt }}{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">Ana Sayfa</a><span>/</span>
+            <a href="{% url 'blog' %}">Blog</a><span>/</span>
+            <span>{{ post.title|truncatechars:40 }}</span>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="blog-detail container--narrow" style="margin:0 auto;padding:40px 24px 80px;">
+        <div class="blog-detail__cover reveal">
+            <img src="{{ post.cover_image.url }}" alt="{{ post.title }}">
+        </div>
+        <div class="blog-detail__meta reveal">
+            {% if post.category %}
+            <span class="blog-card__category">{{ post.category.name }}</span>
+            {% endif %}
+            <span><i class="far fa-calendar"></i> {{ post.published_at|date:"d F Y" }}</span>
+            <span><i class="far fa-clock"></i> {{ post.read_time }} dk okuma</span>
+            <span><i class="far fa-user"></i> {{ post.author }}</span>
+        </div>
+        <h1 class="reveal" style="margin-bottom:24px;">{{ post.title }}</h1>
+        <div class="blog-detail__content reveal">
+            {{ post.content|linebreaksbr }}
+        </div>
+
+        <!-- Share -->
+        <div style="margin-top:40px;padding-top:24px;border-top:1px solid var(--color-border-light);" class="reveal">
+            <p style="font-weight:600;margin-bottom:12px;color:var(--color-dark);">Bu yazıyı paylaşın:</p>
+            <div style="display:flex;gap:10px;">
+                <a href="https://twitter.com/intent/tweet?text={{ post.title|urlencode }}" target="_blank" class="btn btn--sm btn--outline" style="padding:8px 16px;">
+                    <i class="fab fa-x-twitter"></i>
+                </a>
+                <a href="https://www.facebook.com/sharer/sharer.php" target="_blank" class="btn btn--sm btn--outline" style="padding:8px 16px;">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                {% if whatsapp_number %}
+                <a href="https://wa.me/?text={{ post.title|urlencode }}" target="_blank" class="btn btn--sm btn--whatsapp" style="padding:8px 16px;">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Posts -->
+{% if related_posts %}
+<section class="section section--alt">
+    <div class="container">
+        <div class="section-header reveal">
+            <h2>İlgili <em>Yazılar</em></h2>
+        </div>
+        <div class="blog-grid stagger-children">
+            {% for post in related_posts %}
+            <a href="{% url 'blog_detail' post.slug %}" class="blog-card">
+                <div class="blog-card__image">
+                    <img src="{{ post.cover_image.url }}" alt="{{ post.title }}" loading="lazy">
+                </div>
+                <div class="blog-card__body">
+                    <div class="blog-card__meta">
+                        <span><i class="far fa-calendar"></i> {{ post.published_at|date:"d M Y" }}</span>
+                    </div>
+                    <h3 class="blog-card__title">{{ post.title }}</h3>
+                    <span class="blog-card__link">Devamını Oku <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

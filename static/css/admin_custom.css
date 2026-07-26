@@ -1,0 +1,31 @@
+/* Roselle Beauty — Admin Custom Theme */
+:root {
+    --roselle-primary: #B07B7B;
+    --roselle-dark: #8B5E5E;
+    --roselle-light: #D4A5A5;
+}
+
+.sidebar-dark-primary {
+    background: linear-gradient(180deg, #8B5E5E 0%, #6B4545 100%) !important;
+}
+
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active {
+    background-color: var(--roselle-primary) !important;
+}
+
+.btn-primary {
+    background-color: var(--roselle-primary) !important;
+    border-color: var(--roselle-dark) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--roselle-dark) !important;
+}
+
+a {
+    color: var(--roselle-primary);
+}
+
+.badge-primary {
+    background-color: var(--roselle-primary) !important;
+}

@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Ürünler — {{ site_settings.site_title }}{% endblock %}
+{% block meta_desc %}Roselle Beauty & Care doğal cilt ve saç bakım ürünleri koleksiyonu{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">Ana Sayfa</a>
+            <span>/</span>
+            <span>Ürünler</span>
+        </div>
+        <h1>Ürünlerimiz</h1>
+        <p>Doğal ve etkili formüllerle cildinize ve saçlarınıza değer katın</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <!-- Category Filters -->
+        {% if categories %}
+        <div class="category-filters reveal">
+            <a href="{% url 'products' %}" class="category-filter {% if not active_category %}is-active{% endif %}">Tümü</a>
+            {% for cat in categories %}
+            <a href="{% url 'products' %}?kategori={{ cat.slug }}" class="category-filter {% if active_category == cat.slug %}is-active{% endif %}">
+                {{ cat.name }}
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Products Grid -->
+        <div class="products-grid stagger-children">
+            {% for product in products %}
+            <div class="product-card">
+                {% if product.badge %}
+                <span class="product-card__badge product-card__badge--{{ product.badge }}">
+                    {{ product.get_badge_display }}
+                </span>
+                {% endif %}
+                <a href="{% url 'product_detail' product.slug %}" class="product-card__image">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+                    {% if product.image_hover %}
+                    <img src="{{ product.image_hover.url }}" alt="{{ product.name }}" class="hover-img" loading="lazy">
+                    {% endif %}
+                    <div class="product-card__overlay">
+                        <div class="product-card__overlay-actions">
+                            <span class="product-card__overlay-btn"><i class="fas fa-eye"></i></span>
+                        </div>
+                    </div>
+                </a>
+                <div class="product-card__body">
+                    {% if product.category %}
+                    <div class="product-card__category">{{ product.category.name }}</div>
+                    {% endif %}
+                    <h3 class="product-card__title">{{ product.name }}</h3>
+                    <p class="product-card__desc">{{ product.short_description }}</p>
+                    <div class="product-card__footer">
+                        <div class="product-card__price-action">
+                            <span class="price-text">Fiyat İçin</span>
+                            <i class="fas fa-arrow-down bounce-down"></i>
+                        </div>
+                        {% if whatsapp_number %}
+                        <a href="https://wa.me/{{ whatsapp_number }}?text=Merhaba%2C%20{{ product.name|urlencode }}%20ürünü%20hakkında%20bilgi%20almak%20istiyorum." target="_blank" class="product-card__whatsapp">
+                            <i class="fab fa-whatsapp"></i> İletişime Geç
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <i class="fas fa-shopping-bag"></i>
+                <p>Bu kategoride henüz ürün bulunmamaktadır.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
